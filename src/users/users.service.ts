@@ -18,6 +18,24 @@ export class UsersService {
    return await this.prismaService.user.findMany(); 
   }
 
+
+  async findbyTask(taskID: number) {
+    return await this.prismaService.user.findMany({
+      where: {tasks: {some: {id: taskID}
+    }
+  },
+  select:{
+    id:true,
+    email: true,
+    name: true,
+    tasks:{
+      select:{
+        id: true,
+        title: true,
+        status: true} }
+  }});
+  }
+
   async findOne(id: number) {
     return await this.prismaService.user.findUnique({where: {id}});
   }

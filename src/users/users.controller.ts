@@ -18,6 +18,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
+  @Get(':id/task')
+  findByTask(@Param('id') id: string) {
+    return this.usersService.findbyTask(+id);
+  }
+
   @Get(':id')
   findOne(@Param('id',ParseIntPipe) id: number) {
     return this.usersService.findOne(+id);

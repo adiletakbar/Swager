@@ -33,6 +33,11 @@ model Task{
   userId Int 
   user User @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
+
+
+  @@index([title])
+  @@index([id])
+  @@index([title,id])
 }
 
 model User{

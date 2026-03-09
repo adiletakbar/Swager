@@ -19,8 +19,30 @@ export class BoardService {
     return await this.prismaService.board.findUnique({where: {id}});
   }
 
+  async findByTask(taskId: number) {
+    return await this.prismaService.board.findMany({
+      where: {
+      tasks: {
+        some: { id: taskId } 
+      }
+    },
+    include: { tasks: true }
+    });
+  }
+
+
+
 
   async remove(id: number) {
     return await this.prismaService.board.delete({where: {id}});
   }
+
+
+
+
+
+
+
+
+
 }
