@@ -2,9 +2,13 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import cookieParser from 'cookie-parser';
+import { setupSwagger } from './utils/swagger.util';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(cookieParser());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -15,18 +19,7 @@ async function bootstrap() {
   )
 
 
-
-  const config = new DocumentBuilder()
-  .setTitle('Boards App')
-  .setDescription('The Boards App API description')
-  .setVersion('1.0')
-  .addTag('boards')
-  .addTag('users')
-  .addTag('tasks')
-  .build();
-
-  const Document=SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, Document);
+  setupSwagger(app);
 
   await app.listen(3000);
 }

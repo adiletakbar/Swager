@@ -1,8 +1,10 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, HttpCode, HttpStatus, Res, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { RegisterRequest } from './dto/register.dto';
+import { LoginRequest } from './dto/login.dto';
+import type { Response, Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -10,8 +12,40 @@ export class AuthController {
 
  @Post('register')
  @HttpCode(HttpStatus.CREATED)
- async register(@Body() dto:RegisterRequest) {
-   return this.authService.register(dto);
+ async register(
+  @Res({passthrough: true}) res:Response,
+  @Body() dto:RegisterRequest) {
+   return this.authService.register(res,dto);
  }
 
+
+
+
+
+ @Post('login')
+ @HttpCode(HttpStatus.OK)
+ async login(
+  @Res({passthrough: true}) res:Response,
+  @Body() dto:LoginRequest,) {
+   return this.authService.login(res,dto);
+ }
+
+
+ @Post('refresh')
+ @HttpCode(HttpStatus.OK)
+ async refresh(
+  @Res({passthrough: true}) res:Response,
+  @Req() req:Request,) {
+   return this.authService.refresh(req,res);
+ }
+
+
+ @Post('logout')
+ @HttpCode(HttpStatus.OK)
+ async logout(@Res({passthrough: true}) res:Response){
+  return this.authService.logout(res); 
+ }
+
+
 }
+ 
