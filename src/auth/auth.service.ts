@@ -107,6 +107,21 @@ export class AuthService {
     }
 
 
+    async validateUser(id: number) {
+      const user = await this.prisma.user.findUnique({
+        
+        where: {id},
+        select: {id:true},
+        
+      });
+
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      return user;
+    }
+
 
 
     private auth(res:Response,id: number){

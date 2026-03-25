@@ -8,6 +8,11 @@ export async function getJwtConfig(configService: ConfigService): Promise<JwtMod
         secret: configService.getOrThrow<string>('JWT_SECRET'),
         signOptions: {
            algorithm: 'HS256'
-        }
-    }
+        },
+
+        verifyOptions: {
+            algorithms: ['HS256'],
+            ignoreExpiration: false,
+        },
+    };
 }

@@ -5,6 +5,11 @@ import { UpdateAuthDto } from './dto/update-auth.dto';
 import { RegisterRequest } from './dto/register.dto';
 import { LoginRequest } from './dto/login.dto';
 import type { Response, Request } from 'express';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+import { Authorization } from './decorators/authorization.decorator';
+import { Authorized } from './decorators/authorized.decorator';
+import type { User } from 'src/generated/prisma/client';
 
 @Controller('auth')
 export class AuthController {
@@ -45,6 +50,18 @@ export class AuthController {
  async logout(@Res({passthrough: true}) res:Response){
   return this.authService.logout(res); 
  }
+
+
+ //@UseGuards(AuthGuard('jwt'))
+ @Authorization()
+ @Get('me')
+ @HttpCode(HttpStatus.OK)
+ async me(@Authorized() user:User){
+   return user;
+ }
+
+
+
 
 
 }
