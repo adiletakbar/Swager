@@ -10,11 +10,17 @@ import { AuthGuard } from '@nestjs/passport';
 import { Authorization } from './decorators/authorization.decorator';
 import { Authorized } from './decorators/authorized.decorator';
 import type { User } from 'src/generated/prisma/client';
+import { Public } from './decorators/public.decorator';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+
+
+@Public()
+@ApiOperation({ summary: 'Register user' })
  @Post('register')
  @HttpCode(HttpStatus.CREATED)
  async register(
@@ -26,8 +32,9 @@ export class AuthController {
 
 
 
-
- @Post('login')
+@Public()
+@ApiOperation({ summary: 'Login user' })
+@Post('login')
  @HttpCode(HttpStatus.OK)
  async login(
   @Res({passthrough: true}) res:Response,
@@ -35,7 +42,8 @@ export class AuthController {
    return this.authService.login(res,dto);
  }
 
-
+@Public()
+@ApiOperation({ summary: 'Refresh token' })
  @Post('refresh')
  @HttpCode(HttpStatus.OK)
  async refresh(

@@ -3,25 +3,24 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import {ParseIntPipe} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { Authorization } from 'src/auth/decorators/authorization.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/enums/role.enums';
+import { Authorized } from 'src/auth/decorators/authorized.decorator';
 
+
+
+@ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.usersService.findAll();
-  }
-
-  @Get(':id/task')
-  findByTask(@Param('id') id: string) {
-    return this.usersService.findbyTask(+id);
-  }
+@Authorization()
+@Get('profile')
+async getProfile(@Authorized('id') id: number) {
+  return this.usersService.getProfile(id);
+}
 
   @Get(':id')
   findOne(@Param('id',ParseIntPipe) id: number) {
@@ -29,8 +28,16 @@ export class UsersController {
   }
 
 
+
+  @Roles(Role.ADMIN)
+  @Get()
+  findall(){
+    return this.usersService.findAll();
+  }
+
+  @Roles(Role.ADMIN)
   @Delete(':id')
-  remove(@Param('id') id: number) {
+  remove(@Param('id') id: Number) {
     return this.usersService.remove(+id);
   }
 }

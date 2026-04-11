@@ -6,15 +6,14 @@ export class CreateTaskDto {
 
     @IsString()
     @MinLength(2)
-    title: string
+    title!: string;
 
     @IsEnum(TaskStatus)
-    status: TaskStatus
+    status!: TaskStatus;
 
 
     @IsInt()
-    boardId: number
-    userId: number
+    boardId!: number;
     
    
 }

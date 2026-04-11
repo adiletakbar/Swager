@@ -15,6 +15,11 @@ enum TaskStatus{
   done  
 }
 
+enum Role{
+  User
+  Admin 
+}
+
 
 model Board{
   id Int @id @default(autoincrement())
@@ -45,6 +50,7 @@ model User{
   email String @unique
   name String
   password String
+  role Role @default(User)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
